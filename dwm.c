@@ -206,6 +206,7 @@ static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setup(void);
 static void seturgent(Client *c, int urg);
+static void shiftview(const Arg *arg);
 static void showhide(Client *c);
 static void sigchld(int unused);
 static void spawn(const Arg *arg);
@@ -236,7 +237,7 @@ static int xerror(Display *dpy, XErrorEvent *ee);
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
 static void zoom(const Arg *arg);
-static void shiftview(const Arg *arg);
+
 
 /* variables */
 static const char broken[] = "broken";
@@ -703,13 +704,16 @@ dirtomon(int dir)
 }
 
 void
- drawbar(Monitor *m)
+drawbar(Monitor *m)
 {
  	int x, w, tw = 0;
  	int boxs = drw->fonts->h / 9;
  	int boxw = drw->fonts->h / 6 + 2;
  	unsigned int i, occ = 0, urg = 0;
 	Client *c;
+	
+	
+
     
     /* draw status first so it can be overdrawn by tags later */
      	if (m == selmon) { /* status is only drawn on selected monitor */
@@ -738,10 +742,18 @@ void
      	drw_setscheme(drw, scheme[SchemeNorm]);
      	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
      
+     
+     //Experimental code 
+		const char *class;
+		XClassHint cla = { NULL, NULL };
+//		XSetClassHint(dpy, selmon->sel->win, &cla);
+		class    = cla.res_class ? cla.res_class : broken;
+    //
+    	
     	if ((w = m->ww - tw - x) > bh) {
-     		if (m->sel) {
-     			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
-     			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
+     		if (m->sel && class!=NULL) {
+          drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
+     			drw_text(drw, x, 0, w, bh, lrpad / 2, class, 0);
      			if (m->sel->isfloating)
      				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
      		} else {
@@ -750,6 +762,10 @@ void
      		}
      	}
      	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
+     	//
+     	  if (cla.res_class)
+		XFree(cla.res_class);
+     	 //
     }
 void
 drawbars(void)
