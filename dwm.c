@@ -743,17 +743,12 @@ drawbar(Monitor *m)
      	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
      
      
-     //Experimental code 
-		const char *class;
-		XClassHint cla = { NULL, NULL };
-//		XSetClassHint(dpy, selmon->sel->win, &cla);
-		class    = cla.res_class ? cla.res_class : broken;
-    //
+
     	
     	if ((w = m->ww - tw - x) > bh) {
-     		if (m->sel && class!=NULL) {
+     		if (m->sel) {
           drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
-     			drw_text(drw, x, 0, w, bh, lrpad / 2, class, 0);
+     			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
      			if (m->sel->isfloating)
      				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
      		} else {
@@ -762,10 +757,7 @@ drawbar(Monitor *m)
      		}
      	}
      	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
-     	//
-     	  if (cla.res_class)
-		XFree(cla.res_class);
-     	 //
+
     }
 void
 drawbars(void)
