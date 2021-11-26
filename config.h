@@ -5,15 +5,14 @@ static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Mononoki Nerd Font:size=14:antialias=true:autohint=true", 
-										"monospace:size=14", "JoyPixels:pixelsize=14:antialias=true:autohint=true"  };
-static const char dmenufont[]       = "Mononoki Nerd Font:size=14:antialias=true:autohint=true";
-static const char col_gray1[]       = "#000000";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#aaaaaa";
-static const char col_gray4[]       = "#ffffff";
-static const char col_cyan1[]       = "#000000";
-static const char col_cyan2[]       = "#fa35f3";
+static const char *fonts[]          = { "Hack:size=12", "JoyPixels:size=10:antialias=true:autohint=true", "Mononoki Nerd Font:size=12:antialias=true:autohint=true" };
+static const char dmenufont[]       = {"Hack:size=12"};
+static const char col_gray1[]       = "#282828";
+static const char col_gray2[]       = "#7c6f64";
+static const char col_gray3[]       = "#a89984";
+static const char col_gray4[]       = "#fbf1c7";
+static const char col_cyan1[]        = "#282828";
+static const char col_cyan2[]        = "#689d6a";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
@@ -21,7 +20,7 @@ static const char *colors[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "Term", "Web", "File", "Dev", "Misc" };
+static const char *tags[] = { "", "", "", "", "", "爵", "", "", ""};
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -30,8 +29,9 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask		switchtotag	     isfloating   monitor */
 	{ "Thunar",   NULL,       NULL,       1 << 2,       	1, 			    0,           -1 },
-	{ "firefox",  NULL,       NULL,       1 << 1,       	1,	   			0,           -1 },
+	{ "Google-chrome",  "google-chrome",       NULL,       1 << 1,       	1,	   			0,           -1 },
 	{ "Geany",    NULL,       NULL,       1 << 3,       	1,	   			0,           -1 },
+	{ "Zathura",    NULL,       NULL,       1 << 4,       	1,	   			0,           -1 },
 };
 
 /* layout(s) */
@@ -41,13 +41,13 @@ static const int resizehints = 1;    /* 1 means respect size hints in tiled resi
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "",      tile },    /* first entry is default */
-	{ "",      NULL },    /* no layout function means floating behavior */
-	{ "",      monocle },
+	{ "| 舘 |",      tile },    /* first entry is default */
+	{ "| 缾 |",      NULL },    /* no layout function means floating behavior */
+	{ "|  |",      monocle },
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -60,8 +60,8 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan1, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
-static const char *browsercmd[] = {"firefox", NULL};
+static const char *termcmd[]  = { "alacritty", NULL };
+static const char *browsercmd[] = {"google-chrome-stable", NULL};
 static const char *filecmd[] = {"thunar", NULL};
 
 static Key keys[] = {
@@ -98,7 +98,14 @@ static Key keys[] = {
 	TAGKEYS(                        XK_3,                      2)
 	TAGKEYS(                        XK_4,                      3)
 	TAGKEYS(                        XK_5,                      4)
+	TAGKEYS(                        XK_6,                      5)
+	TAGKEYS(                        XK_7,                      6)
+	TAGKEYS(                        XK_8,                      7)
+	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+	{ 0, 							XF86XK_AudioMute,		spawn,			SHCMD("amixer set Master toggle") },
+	{ 0, 							XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 3") },
+	{ 0, 							XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 3") },
 };
 
 /* button definitions */
