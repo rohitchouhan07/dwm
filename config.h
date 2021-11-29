@@ -1,12 +1,16 @@
 /* See LICENSE file for copyright and license details. */
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 2;        /* border pixel of windows */
 static const unsigned int gappx     = 8;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Hack:size=12", "JoyPixels:size=10:antialias=true:autohint=true", "Mononoki Nerd Font:size=12:antialias=true:autohint=true" };
-static const char dmenufont[]       = {"Hack:size=12"};
+static const int usealtbar          = 0;        /* 1 means use non-dwm status bar */
+static const char *altbarclass      = "Polybar"; /* Alternate bar class name */
+static const char *alttrayname      = "tray";    /* Polybar tray instance name */
+static const char *altbarcmd        = "$HOME/.config/polybar/"; /* Alternate bar launch command */
+static const char *fonts[]          = { "RobotoMono:size=12", "JoyPixels:size=10:antialias=true:autohint=true", "Mononoki Nerd Font:size=12:antialias=true:autohint=true" };
+static const char dmenufont[]       = {"RobotoMono:size=12"};
 static const char col_gray1[]       = "#282828";
 static const char col_gray2[]       = "#7c6f64";
 static const char col_gray3[]       = "#a89984";
@@ -32,6 +36,7 @@ static const Rule rules[] = {
 	{ "Google-chrome",  "google-chrome",       NULL,       1 << 1,       	1,	   			0,           -1 },
 	{ "Geany",    NULL,       NULL,       1 << 3,       	1,	   			0,           -1 },
 	{ "Zathura",    NULL,       NULL,       1 << 4,       	1,	   			0,           -1 },
+	{ "code-oss",    NULL,       NULL,       1 << 9,       	1,	   			0,           -1 },
 };
 
 /* layout(s) */
@@ -91,8 +96,8 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                  XK_bracketleft,  shiftview,    {.i = -1 } },
-	{ MODKEY,                  XK_bracketright,  shiftview,    {.i = +1 } },
+	{ MODKEY,                  		XK_bracketleft,  shiftview,    {.i = -1 } },
+	{ MODKEY,                  		XK_bracketright,  shiftview,    {.i = +1 } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -103,7 +108,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-	{ 0, 							XF86XK_AudioMute,		spawn,			SHCMD("amixer set Master toggle") },
+	{ 0, 							XF86XK_AudioMute,			spawn,		SHCMD("amixer set Master toggle") },
 	{ 0, 							XF86XK_AudioRaiseVolume,	spawn,		SHCMD("pamixer --allow-boost -i 3") },
 	{ 0, 							XF86XK_AudioLowerVolume,	spawn,		SHCMD("pamixer --allow-boost -d 3") },
 };
